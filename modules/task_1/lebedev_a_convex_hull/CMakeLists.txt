@@ -5,6 +5,29 @@ if ( USE_SEQ )
     project( ${ProjectId} )
     message( STATUS "-- " ${ProjectId} )
 
+    include( cmake/OpenCVGet.txt )
+
+    set(OPENCV_INSTALL_DIR "${CMAKE_BINARY_DIR}/opencv_dist")
+    set(OPENCV_VERSION 4.3.0)
+    if (NOT EXISTS "${OPENCV_INSTALL_DIR}")
+	set(DOWNLOAD_DIR "${CMAKE_BINARY_DIR}/tmp")
+	download_opencv(${DOWNLOAD_DIR} ${OPENCV_VERSION} OUTPUT_DL_PATH)
+	message("${OUTPUT_DL_PATH}")
+        extract_opencv(${OUTPUT_DL_PATH} ${DOWNLOAD_DIR} OUTPUT_PATH)
+        install_opencv(${OUTPUT_PATH} "core,imgcodecs" ${OPENCV_INSTALL_DIR})
+    endif()
+
+    execute_process(
+		COMMAND setup_vars_opencv4.cmd
+		WORKING_DIRECTORY "${OPENCV_INSTALL_DIR}"
+		ERROR_VARIABLE EXEC_ERR)
+    if(${RESULT_VARIABLE})
+    	message(FATAL_ERROR ${EXEC_ERR})
+    endif()
+ 
+    find_package(OpenCV REQUIRED
+	COMPONENTS core imgcodecs)
+
     file(GLOB_RECURSE ALL_SOURCE_FILES *.cpp *.h)
 
     set(PACK_LIB "${ProjectId}_lib")
@@ -12,8 +35,19 @@ if ( USE_SEQ )
 
     add_executable( ${ProjectId} ${ALL_SOURCE_FILES} )
 
+    include_directories(${OpenCV_INCLUDE_DIRS})
+
     target_link_libraries(${ProjectId} ${PACK_LIB})
+    target_link_libraries(${ProjectId} ${OpenCV_LIBS})
     target_link_libraries(${ProjectId} gtest gtest_main)
+
+    set(TEST_IMG_DIR "${CMAKE_BINARY_DIR}/images")
+    if(NOT EXISTS "${TEST_IMG_DIR}")
+	file(MAKE_DIRECTORY "${TEST_IMG_DIR}")
+	if(NOT EXISTS "${TEST_IMG_DIR}")
+	    message(FATAL_ERROR "Failed to create directory for test images ${TEST_IMG_DIR}")
+	endif()
+    endif()
 
     enable_testing()
     add_test(NAME ${ProjectId} COMMAND ${ProjectId})

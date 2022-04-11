@@ -1,0 +1,79 @@
+# Copyright 2022 Lebedev Alexey
+
+function(download_opencv download_dir version output_path)
+    if(NOT EXISTS "${download_dir}")
+	file(MAKE_DIRECTORY "${download_dir}")
+	if(NOT EXISTS "${download_dir}")
+	    message(FATAL_ERROR "Failed to create directory for downloading opencv ${download_dir}")
+	endif()
+    endif()
+    set(OPENCV_NAME "opencv-${version}")
+    set(download_path "${download_dir}/${OPENCV_NAME}.tar.gz")
+    set(${output_path} "${download_path}" PARENT_SCOPE)
+    message(STATUS "Downloading ${OPENCV_NAME}")
+    file(DOWNLOAD "https://github.com/opencv/opencv/archive/refs/tags/${version}.tar.gz"
+	          "${download_path}"
+	          SHOW_PROGRESS)
+endfunction()
+
+
+function(extract_opencv opencv_tar_gz output_dir output_path)
+    if(NOT EXISTS "${output_dir}")
+	file(MAKE_DIRECTORY "${output_dir}")
+	if(NOT EXISTS "${output_dir}")
+	    message(FATAL_ERROR "Failed to create directory for extracting opencv ${output_dir}")
+	endif()
+    endif()
+    message(STATUS "Extracting ${opencv_tar_gz}")
+    execute_process(COMMAND
+		${CMAKE_COMMAND} -E tar xf ${opencv_tar_gz}
+		WORKING_DIRECTORY ${output_dir}
+		ERROR_VARIABLE EXEC_ERR
+		OUTPUT_VARIABLE EXEC_OUT)
+    message(STATUS ${EXEC_OUT})
+    if(${RESULT_VARIABLE})
+	message(FATAL_ERROR ${EXEC_ERR})
+    endif()
+    get_filename_component(opencv_dir_name "${opencv_tar_gz}" NAME_WLE)
+    get_filename_component(opencv_dir_name "${opencv_dir_name}" NAME_WLE)
+    set(${output_path} "${output_dir}/${opencv_dir_name}" PARENT_SCOPE)
+endfunction()
+
+
+function(install_opencv opencv_dir components install_dir)
+    set(build_dir "${opencv_dir}/build")
+    if(NOT EXISTS "${build_dir}")
+	file(MAKE_DIRECTORY "${build_dir}")
+	if(NOT EXISTS "${build_dir}")
+	    message(FATAL_ERROR "Failed to create directory for building opencv ${build_dir}")
+	endif()
+    endif()
+
+    execute_process(
+        COMMAND cmake
+                -DBUILD_LIST=${components}
+                -DCMAKE_INSTALL_PREFIX=${install_dir} ..
+	WORKING_DIRECTORY ${build_dir}
+	ERROR_VARIABLE EXEC_ERR)
+    if(${RESULT_VARIABLE})
+        message(FATAL_ERROR ${EXEC_ERR})
+    endif()
+
+    message(STATUS "Building OpenCV")
+    execute_process(
+	COMMAND cmake --build . --config Release -j ${NumCores}
+	WORKING_DIRECTORY ${build_dir}
+	ERROR_VARIABLE EXEC_ERR)
+    if(RESULT_VARIABLE)
+	message(FATAL_ERROR ${EXEC_ERR})
+    endif()
+
+    message(STATUS "Installing OpenCV to ${install_dir}")
+    execute_process(
+	COMMAND cmake --install .
+	WORKING_DIRECTORY ${build_dir}
+	ERROR_VARIABLE EXEC_ERR )
+   if(${RESULT_VARIABLE})
+	message(FATAL_ERROR ${EXEC_ERR})
+   endif()
+endfunction()
