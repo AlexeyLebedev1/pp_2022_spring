@@ -7,22 +7,18 @@ if ( USE_SEQ )
 
     include( cmake/OpenCVGet.txt )
 
-    set(OPENCV_INSTALL_DIR "${CMAKE_BINARY_DIR}/opencv_dist")
     set(OPENCV_VERSION 4.3.0)
-    if (NOT EXISTS "${OPENCV_INSTALL_DIR}")
-	set(DOWNLOAD_DIR "${CMAKE_BINARY_DIR}/tmp")
-	download_opencv(${DOWNLOAD_DIR} ${OPENCV_VERSION} OUTPUT_DL_PATH)
-        extract_opencv(${OUTPUT_DL_PATH} ${DOWNLOAD_DIR} OUTPUT_PATH)
-        install_opencv(${OUTPUT_PATH} "core,imgcodecs" ${OPENCV_INSTALL_DIR})
+    set(DOWNLOAD_DIR "${CMAKE_BINARY_DIR}/tmp")
+    set(OPENCV_SRC "${DOWNLOAD_DIR}/opencv-${OPENCV_VERSION}")
+    if (NOT EXISTS "${OPENCV_SRC}")
+	download_opencv(${DOWNLOAD_DIR} ${OPENCV_VERSION})
+        extract_opencv(${OPENCV_ARCHIVE_PATH} ${DOWNLOAD_DIR})
+        build_opencv(${OPENCV_SRC} "core,imgcodecs")
     endif()
 
-    execute_process(
-		COMMAND setup_vars_opencv4.cmd
-		WORKING_DIRECTORY "${OPENCV_INSTALL_DIR}"
-		ERROR_VARIABLE EXEC_ERR)
-    if(${RESULT_VARIABLE})
-    	message(FATAL_ERROR ${EXEC_ERR})
-    endif()
+    set(OpenCV_DIR "${OPENCV_SRC}/build")
+    file(GLOB OPENCV_LIBS "${OpenCV_DIR}/bin/Release/*.*")
+    file(COPY ${OPENCV_LIBS} DESTINATION "${CMAKE_BINARY_DIR}/bin")
  
     find_package(OpenCV REQUIRED
 	COMPONENTS core imgcodecs)
