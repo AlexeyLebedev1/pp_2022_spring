@@ -15,7 +15,7 @@ void lab1::convex_hull(const cv::Mat& c1_image, std::vector<cv::Point2d>& output
 		return;
 	}
 	std::sort(output.begin(), output.end(), [](const cv::Point2d& p1, const cv::Point2d& p2) {
-		return p1.x < p2.x || p1.x == p2.x && p1.y < p2.y;
+		return p1.x < p2.x || (p1.x == p2.x && p1.y < p2.y);
 	});
 	cv::Point2d p1 = output.front(), p2 = output.back();
 	std::vector<cv::Point2d> up, down;
