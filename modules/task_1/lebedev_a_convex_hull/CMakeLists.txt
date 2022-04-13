@@ -19,11 +19,10 @@ if ( USE_SEQ )
     set(OpenCV_DIR "${OPENCV_SRC}/build")
 
     if(WIN32)
-        set(lib_ext "dll")
+        file(GLOB_RECURSE OPENCV_LIBS "${OpenCV_DIR}/bin/*.dll*")
     else()
-        set(lib_ext "so*")
+        file(GLOB_RECURSE OPENCV_LIBS "${OpenCV_DIR}/lib/*.so*")
     endif()
-    file(GLOB_RECURSE OPENCV_LIBS "${OpenCV_DIR}/bin/*.${lib_ext}")
     message("${OPENCV_LIBS}")
     file(COPY ${OPENCV_LIBS} DESTINATION "${CMAKE_BINARY_DIR}/bin")
 
