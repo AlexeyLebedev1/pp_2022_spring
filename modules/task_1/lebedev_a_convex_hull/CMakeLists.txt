@@ -17,7 +17,12 @@ if ( USE_SEQ )
     endif()
 
     set(OpenCV_DIR "${OPENCV_SRC}/build")
-    file(GLOB OPENCV_LIBS "${OpenCV_DIR}/bin/Release/*.*")
+    if(WIN32)
+        file(GLOB OPENCV_LIBS "${OpenCV_DIR}/bin/Release/*.*")
+    else()
+        file(GLOB OPENCV_LIBS "${OpenCV_DIR}/bin/*.*")
+    endif()
+    message("${OPENCV_LIBS}")
     file(COPY ${OPENCV_LIBS} DESTINATION "${CMAKE_BINARY_DIR}/bin")
  
     find_package(OpenCV REQUIRED
