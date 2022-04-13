@@ -83,7 +83,8 @@ TEST_F(ConvexHullTEST, Test_normal_dist) {
 }
 
 TEST_F(ConvexHullTEST, Test_polygon) {
-    std::vector<cv::Point2d> vertexes = { {100, 200}, {100, 300}, {200, 500}, {300, 500}, {400, 300}, {400, 200}, {300, 100}, {200, 100} };
+    std::vector<cv::Point2d> vertexes = { {100, 200}, {100, 300}, {200, 500}, {300, 500},
+                                          {400, 300}, {400, 200}, {300, 100}, {200, 100} };
     for (const auto& v : vertexes) {
         test_image.at<uint8_t>(v) = 255;
     }

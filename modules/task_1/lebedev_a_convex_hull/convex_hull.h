@@ -8,7 +8,7 @@
 
 
 namespace lab1 {
-	void convex_hull(const cv::Mat& c1_image, std::vector<cv::Point2d>* output);
+    void convex_hull(const cv::Mat& c1_image, std::vector<cv::Point2d>* output);
 };  // namespace lab1
 
 
