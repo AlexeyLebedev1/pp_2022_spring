@@ -21,9 +21,10 @@ if ( USE_SEQ )
     if(WIN32)
         set(lib_ext "dll")
     else()
-        set(lib_ext "so")
+        set(lib_ext "so*")
     endif()
     file(GLOB_RECURSE OPENCV_LIBS "${OpenCV_DIR}/bin/*.${lib_ext}")
+    message("${OPENCV_LIBS}")
     file(COPY ${OPENCV_LIBS} DESTINATION "${CMAKE_BINARY_DIR}/bin")
 
     find_package(OpenCV REQUIRED

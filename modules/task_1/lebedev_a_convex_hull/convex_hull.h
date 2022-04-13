@@ -3,6 +3,7 @@
 #define MODULES_TASK_1_LEBEDEV_A_CONVEX_HULL_CONVEX_HULL_H_
 
 
+#include <vector>
 #include "opencv2/opencv.hpp"
 
 
