@@ -45,7 +45,7 @@ function(build_opencv opencv_dir components)
 	endif()
     endif()
 
-    if(WIN32)
+    if("${CMAKE_GENERATOR_PLATFORM}" STREQUAL "Win32")
         execute_process(
            COMMAND cmake
                    -DBUILD_LIST=${components} ..

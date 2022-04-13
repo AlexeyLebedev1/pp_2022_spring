@@ -1,9 +1,7 @@
 // Copyright 2022 Lebedev Alexey
 #include <gtest/gtest.h>
-#include <vector>
 #include <random>
 #include "./convex_hull.h"
-#include "opencv2/opencv.hpp"
 
 
 // image parameters

@@ -17,14 +17,15 @@ if ( USE_SEQ )
     endif()
 
     set(OpenCV_DIR "${OPENCV_SRC}/build")
+
     if(WIN32)
-        file(GLOB OPENCV_LIBS "${OpenCV_DIR}/bin/Release/*.*")
+        set(lib_ext "dll")
     else()
-        file(GLOB OPENCV_LIBS "${OpenCV_DIR}/bin/*.*")
+        set(lib_ext "so")
     endif()
-    message("${OPENCV_LIBS}")
+    file(GLOB_RECURSE OPENCV_LIBS "${OpenCV_DIR}/bin/*.${lib_ext}")
     file(COPY ${OPENCV_LIBS} DESTINATION "${CMAKE_BINARY_DIR}/bin")
- 
+
     find_package(OpenCV REQUIRED
 	COMPONENTS core imgcodecs)
 
