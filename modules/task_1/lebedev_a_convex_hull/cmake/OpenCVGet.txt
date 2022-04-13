@@ -45,11 +45,20 @@ function(build_opencv opencv_dir components)
 	endif()
     endif()
 
-    execute_process(
-        COMMAND cmake
-                -DBUILD_LIST=${components} ..
-	WORKING_DIRECTORY ${build_dir}
-	ERROR_VARIABLE EXEC_ERR)
+    if(WIN32)
+        execute_process(
+           COMMAND cmake
+                   -DBUILD_LIST=${components} ..
+		   -A Win32
+	   WORKING_DIRECTORY ${build_dir}
+	   ERROR_VARIABLE EXEC_ERR)
+    else()
+	execute_process(
+           COMMAND cmake
+                   -DBUILD_LIST=${components} ..
+	   WORKING_DIRECTORY ${build_dir}
+	   ERROR_VARIABLE EXEC_ERR)
+    endif()
     if(${RESULT_VARIABLE})
         message(FATAL_ERROR ${EXEC_ERR})
     endif()
