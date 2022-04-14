@@ -88,6 +88,8 @@ endif( APPLE )
 
 ############################## OpenCV ##############################
 set(BUILD_LIST core imgcodecs)
+set(BUILD_PERF_TESTS OFF)
+set(BUILD_TESTS OFF)
 set(OpenCV_TREE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/opencv")
 add_subdirectory("${OpenCV_TREE}")
 file(GLOB INCLUDE_MODULES LIST_DIRECTORIES true "${OpenCV_TREE}/modules/*/include")
