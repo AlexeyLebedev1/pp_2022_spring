@@ -15,7 +15,7 @@ static const cv::Mat separation(cv::Size2d(separation_width, image_size.height),
 
 
 class ConvexHullTEST : public ::testing::Test {
-protected:
+ protected:
     cv::Mat test_image;
     std::vector<cv::Point2d> conv;
     std::string test_name;
@@ -29,8 +29,7 @@ protected:
             cv::circle(convex_hull, conv[i], 2, fill_color, -1);
             if (i < conv.size() - 1) {
                 cv::line(convex_hull, conv[i], conv[i + 1], fill_color);
-            }
-            else {
+            } else {
                 cv::line(convex_hull, conv.front(), conv.back(), fill_color);
             }
         }
