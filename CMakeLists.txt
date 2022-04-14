@@ -86,6 +86,15 @@ if( APPLE )
     cpplint_add_subdirectory(modules)
 endif( APPLE )
 
+############################## OpenCV ##############################
+set(BUILD_LIST core imgcodecs imgproc)
+set(OpenCV_TREE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/opencv")
+add_subdirectory("${OpenCV_TREE}")
+foreach(component ${BUILD_LIST})
+    include_directories("${OpenCV_TREE}/modules/${component}/include")
+endforeach()
+include_directories("${CMAKE_SOURCE_DIR}/build" "${OpenCV_TREE}/include")
+
 ############################## Modules ##############################
 include_directories(3rdparty/unapproved)
 add_subdirectory(modules)
