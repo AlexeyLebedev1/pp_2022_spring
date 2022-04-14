@@ -87,13 +87,11 @@ if( APPLE )
 endif( APPLE )
 
 ############################## OpenCV ##############################
-set(BUILD_LIST core imgcodecs imgproc)
+set(BUILD_LIST core imgcodecs)
 set(OpenCV_TREE "${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/opencv")
 add_subdirectory("${OpenCV_TREE}")
-foreach(component ${BUILD_LIST})
-    include_directories("${OpenCV_TREE}/modules/${component}/include")
-endforeach()
-include_directories("${CMAKE_SOURCE_DIR}/build" "${OpenCV_TREE}/include")
+file(GLOB INCLUDE_MODULES LIST_DIRECTORIES true "${OpenCV_TREE}/modules/*/include")
+include_directories("${INCLUDE_MODULES}" "${CMAKE_SOURCE_DIR}/build" "${OpenCV_TREE}/include")
 
 ############################## Modules ##############################
 include_directories(3rdparty/unapproved)
