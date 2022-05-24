@@ -1,10 +1,6 @@
 // Copyright 2022 Kharunova Alina
 #include <gtest/gtest.h>
-#include "./dijkstra_algorithm.h"
-
-TEST(search_shortest_path_algorithm, 1_size_graph_1) {
-  ASSERT_NO_THROW(start_algorithm(0, 1, 1));
-}
+#include "./kharunova_a_dijkstra_algorithm.h"
 
 TEST(search_shortest_path_algorithm, 15_size_graph_10) {
   ASSERT_NO_THROW(start_algorithm(0, 15, 10));
@@ -22,8 +18,8 @@ TEST(search_shortest_path_algorithm, 500_size_graph_80) {
   ASSERT_NO_THROW(start_algorithm(0, 500, 80));
 }
 
-TEST(search_shortest_path_algorithm, 1000_size_graph_100) {
-  ASSERT_NO_THROW(start_algorithm(0, 1000, 100));
+TEST(search_shortest_path_algorithm, 500_size_graph_100) {
+  ASSERT_NO_THROW(start_algorithm(0, 500, 100));
 }
 
 int main(int argc, char **argv) {
