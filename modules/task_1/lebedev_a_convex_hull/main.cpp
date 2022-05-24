@@ -56,27 +56,16 @@ void fill_image_random_uniform(cv::Mat* c1_image, const std::vector<size_t>& roi
 }
 
 
-void fill_image_random_normal(cv::Mat* c1_image, size_t mean, size_t stddev, size_t num_points) {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::normal_distribution<float> dist(mean, stddev);
-    for (size_t i = 0; i < num_points; ++i) {
-        cv::Point2d rand_pix(dist(gen), dist(gen));
-        c1_image->at<uint8_t>(rand_pix) = 255;
-    }
-}
-
-
-TEST_F(ConvexHullTEST, Test_uniform_dist) {
+TEST_F(ConvexHullTEST, Test_uniform_dist_2_objects) {
     fill_image_random_uniform(&test_image, { 100, 300, 500, 600 }, 100);
     fill_image_random_uniform(&test_image, { 500, 600, 100, 400 }, 100);
     lab1::convex_hull(test_image, &conv);
 }
 
-TEST_F(ConvexHullTEST, Test_normal_dist) {
-    fill_image_random_normal(&test_image, 300, 50, 100);
-    fill_image_random_normal(&test_image, 500, 50, 50);
-    fill_image_random_normal(&test_image, 200, 50, 50);
+TEST_F(ConvexHullTEST, Test_uniform_dist_3_objects) {
+    fill_image_random_uniform(&test_image, { 100, 300, 500, 600 }, 100);
+    fill_image_random_uniform(&test_image, { 400, 500, 200, 300 }, 100);
+    fill_image_random_uniform(&test_image, { 500, 600, 100, 400 }, 100);
     lab1::convex_hull(test_image, &conv);
 }
 
